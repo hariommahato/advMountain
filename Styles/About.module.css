@@ -1,0 +1,17 @@
+.aboutImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  height: 30rem;
+}
+.aboutImgContainer .image {
+  flex-shrink: 0;
+  min-width: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+.aboutText {
+  position: a;
+}/*# sourceMappingURL=About.module.css.map */

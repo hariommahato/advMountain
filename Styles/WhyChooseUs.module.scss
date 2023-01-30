@@ -1,0 +1,11 @@
+.whychooseusMain {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  $breakpoint-tablet: 768px;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  
+  }
+}

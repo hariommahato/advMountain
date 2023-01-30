@@ -1,0 +1,10 @@
+.whychooseusMain {
+  display: flex;
+  justify-content: space-around;
+}
+@media (max-width: 768px) {
+  .whychooseusMain {
+    display: flex;
+    flex-direction: column;
+  }
+}/*# sourceMappingURL=WhyChooseUs.module.css.map */
