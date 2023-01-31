@@ -1,12 +1,10 @@
 "use client";
-import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import { useGetPopularDestinationDataQuery } from "../../services/adminInteraction";
-const PopularDestination = () => {
-const {data}=useGetPopularDestinationDataQuery()
+const PopularDestination = ({data}) => {
+
   return (
     <Container
       style={{
@@ -16,8 +14,8 @@ const {data}=useGetPopularDestinationDataQuery()
       <h1
         style={{
           textAlign: "center",
-          textDecoration: "underline",
-          color: "#E14D2A",
+          
+          color: "gray",
         }}
       >
         Popular Destination

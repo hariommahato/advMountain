@@ -23,8 +23,8 @@ const Bhutan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+              
+              color: "gray",
             }}
           >
             Trekking In Bhutan
@@ -55,8 +55,8 @@ const Bhutan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             
+              color: "gray",
             }}
           >
             DayExcursion In Bhutan
@@ -87,8 +87,8 @@ const Bhutan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             
+              color: "gray",
             }}
           >
             Expedition In Bhutan
@@ -119,8 +119,8 @@ const Bhutan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             
+              color: "gray",
             }}
           >
             Hiking In Bhutan
@@ -151,8 +151,8 @@ const Bhutan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+          
+              color: "gray",
             }}
           >
             PeakClimbing In Bhutan
@@ -182,8 +182,8 @@ const Bhutan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+              
+              color: "gray",
             }}
           >
             VehicleTour In Bhutan

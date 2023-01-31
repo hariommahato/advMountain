@@ -1,10 +1,11 @@
 "use client";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import FileBase from "react-file-base64";
 import React, { useEffect, useState } from "react";
 import { useCreateDayExcursionDataMutation } from "../../../../../services/adminInteraction";
 import { Row, Col, Container } from "react-bootstrap";
+import { uploadImage } from "../../../../../services/upload";
+import { formDataFactory } from "../../../../../helpers/factories";
 import { useRouter } from "next/navigation";
 const DayExcursion = () => {
   const [highlights, setHighlights] = useState([]);
@@ -27,11 +28,8 @@ const DayExcursion = () => {
   const [price, setPrice] = useState();
   const [overview, setOverview] = useState("");
   const [comprehensiveGuide, setComprehensiveGuide] = useState("");
-
   const [guidesTitle, setGuidesTitle] = useState("");
   const [map, setMap] = useState("");
-  const [carouselImage, setCarouselImage] = useState("");
-  const [tourImage, setTourImage] = useState();
   const [itineraryTitle, setItineraryTitle] = useState("");
   const [itineraryDescription, setItineraryDescription] = useState("");
   const [priceIncludedItem, setPriceIncludedItem] = useState("");
@@ -43,6 +41,7 @@ const DayExcursion = () => {
   const [experienceRequired, setExperienceRequired] = useState("");
   const [bestTimeToTravel, setBestTimeToTravel] = useState("");
   const [visaAndEntryProcedure, setVisaAndEntryProcedure] = useState("");
+  const [image, setImage] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -50,6 +49,30 @@ const DayExcursion = () => {
       router.push("/dashboard/dayexcursion");
     }
   }, [isSuccess]);
+  function handleOnChange(e) {
+    setImage(e.target.files[0]);
+  }
+  async function handleImageMultipleAdd() {
+    const formData = formDataFactory(image, "reactupload");
+    const response = await uploadImage(formData);
+    homeImageCarousel.push({ carouselImage: response.data.data.url });
+    alert("Success");
+    return;
+  }
+  async function handleTourImageAdd() {
+    const formData = formDataFactory(image, "reactupload");
+    const response = await uploadImage(formData);
+    tourImages.push({ tourImage: response.data.data.url });
+    alert("success");
+    return;
+  }
+  async function handleMapAdd() {
+    const formData = formDataFactory(image, "reactupload");
+    const response = await uploadImage(formData);
+    setMap(response.data.data.url);
+    alert("success");
+    return;
+  }
 
   const handleHighlightAdd = (e) => {
     e.preventDefault();
@@ -58,20 +81,7 @@ const DayExcursion = () => {
       setHighlightsTitle("");
     }
   };
-  const handleImageMultipleAdd = (e) => {
-    e.preventDefault();
-    if (carouselImage !== "") {
-      homeImageCarousel.push({ carouselImage: carouselImage });
-      setCarouselImage("");
-    }
-  };
-  const handleTourImageAdd = (e) => {
-    e.preventDefault();
-    if (tourImage !== "") {
-      tourImages.push({ tourImage: tourImage });
-      setTourImage("");
-    }
-  };
+
   const handleItineraryAdd = (e) => {
     e.preventDefault();
     if (itineraryTitle !== "" && itineraryDescription !== "") {
@@ -391,11 +401,7 @@ const DayExcursion = () => {
       <Row style={{ marginTop: "2rem" }}>
         <h5>Add Images For the Carousel</h5>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <FileBase
-            type="file"
-            name="image"
-            onDone={({ base64 }) => setCarouselImage(base64)}
-          />
+          <input type="file" onChange={handleOnChange} />
           <div style={{ display: "flex", gap: "10px" }}>
             <Button onClick={handleImageMultipleAdd}>Add More</Button>
             <Button
@@ -423,11 +429,7 @@ const DayExcursion = () => {
       <Row style={{ marginTop: "2rem" }}>
         <h5>Choose image that are seen when people go there</h5>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <FileBase
-            type="file"
-            name="image"
-            onDone={({ base64 }) => setTourImage(base64)}
-          />
+          <input type="file" onChange={handleOnChange} />
           <div style={{ display: "flex", gap: "10px" }}>
             <Button onClick={handleTourImageAdd}>Add More</Button>
             <Button
@@ -455,12 +457,11 @@ const DayExcursion = () => {
       <Row>
         <h5>Add Map Of The Tour</h5>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <FileBase
-            type="file"
-            name="image"
-            onDone={({ base64 }) => setMap(base64)}
-          />
+          <input type="file" onChange={handleOnChange} />
         </Col>
+        <Button variant="primary" onClick={handleMapAdd}>
+          Add
+        </Button>
 
         <img src={map} style={{ height: "100px", width: "100px" }} alt="map" />
       </Row>

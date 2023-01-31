@@ -4,17 +4,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import { useGetRecentTourDataQuery } from "../../services/adminInteraction";
 
-const RecentTours = () => {
-  const { data } = useGetRecentTourDataQuery();
+const RecentTours = ({ data }) => {
   return (
     <Container style={{ marginTop: "1rem" }}>
       <h1
         style={{
           textAlign: "center",
-          textDecoration: "underline",
-          color: "#E14D2A",
+
+          color: "gray",
         }}
       >
         Recent Tours

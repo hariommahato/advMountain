@@ -253,10 +253,10 @@ const DashboardNavbar = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu style={{ width: "100%" }}>
-                <Dropdown.Item as={Link} href={"/dashboard/recenttour/add"}>
+                <Dropdown.Item as={Link} href={"/dashboard/populardestination/add"}>
                   Add PopularDestination
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} href={"/dashboard/recenttour"}>
+                <Dropdown.Item as={Link} href={"/dashboard/populardestination"}>
                   View ALL PopularDestination
                 </Dropdown.Item>
               </Dropdown.Menu>

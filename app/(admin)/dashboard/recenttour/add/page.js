@@ -2,7 +2,8 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import React, { useEffect, useState } from "react";
-import FileBase from "react-file-base64";
+import { uploadImage } from "../../../../../services/upload";
+import { formDataFactory } from "../../../../../helpers/factories";
 import { useCreateRecentTourDataMutation } from "../../../../../services/adminInteraction";
 
 import { useRouter } from "next/navigation";
@@ -19,12 +20,25 @@ const RecentTour = () => {
     useCreateRecentTourDataMutation();
   const router = useRouter();
   const { title, description, image } = recentTourData;
-
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setRecentTourData({
+      ...recentTourData,
+      image: response.data.data.secure_url,
+    });
+    alert("success");
+    return;
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     createRecentTourData(recentTourData);
-    router.push("/dashboard/populardestination");
-    setPopularDestinationData("");
+    router.push("/dashboard/recenttour");
+    setRecentTourData("");
   };
   useEffect(() => {
     if (isSuccess) {
@@ -62,14 +76,10 @@ const RecentTour = () => {
             />
           </Form.Group>
 
-          <FileBase
-            type="file"
-            name="image"
-            multiple={false}
-            onDone={({ base64 }) =>
-              setRecentTourData({ ...recentTourData, image: base64 })
-            }
-          />
+          <input type="file" onChange={handleOnChange} />
+          <Button variant="primary" onClick={handleImageAdd}>
+            Add
+          </Button>
 
           <Button variant="primary" type="submit" onClick={handleSubmit}>
             Submit

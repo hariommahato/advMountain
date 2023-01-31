@@ -23,8 +23,7 @@ const India = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             Trekking In India
@@ -55,8 +54,7 @@ const India = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+           color:"gray"
             }}
           >
             DayExcursion In India
@@ -87,8 +85,7 @@ const India = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             Expedition In India
@@ -119,8 +116,7 @@ const India = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+            color:"gray"
             }}
           >
             Hiking In India
@@ -151,8 +147,7 @@ const India = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             PeakClimbing In India
@@ -182,8 +177,7 @@ const India = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             VehicleTour In India

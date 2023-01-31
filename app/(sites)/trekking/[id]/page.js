@@ -12,22 +12,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-import { FreeMode, Pagination } from "swiper";
+import { FreeMode, Pagination,Autoplay } from "swiper";
 import { Card } from "react-bootstrap";
 import Link from "next/link";
-import Spinner from "react-bootstrap/Spinner";
 
 export default function Page({ params }) {
   const { id } = params;
-
   const { data, isFetching } = useGetTrekkingDataByIdQuery(id);
   const { data: trekkingData } = useGetTrekkingDataQuery();
-  if (isFetching) {
-    return <Spinner animation="border" variant="danger" />;
-  }
+  {console.log(data)}
+  
   return (
     <div className={styles.mainDiv}>
-      <div className={styles.left}>
+      <div className={styles.left}>    
         <h1>{data?.trek?.name}</h1>
 
         <Carousel variant="dark">
@@ -45,9 +42,9 @@ export default function Page({ params }) {
         </Carousel>
 
         <div>
-          <div style={{ textAlign: "justify" }}>
+          <div style={{ textAlign: "justify" ,marginTop:"1rem"}}>
             <h3>Trip OverView</h3>
-            <p>{data?.trek?.overview}</p>
+            <p style={{color:"gray"}}>{data?.trek?.overview}</p>
           </div>
           <div>
             <Table striped bordered hover>
@@ -243,6 +240,7 @@ export default function Page({ params }) {
         <div style={{ marginTop: "3rem", marginBottom: "2rem" }}>
           <h1 style={{ textAlign: "center" }}>Similar Trekking </h1>
           <Swiper
+         
             breakpoints={{
               0: {
                 slidesPerView: "1",
@@ -254,18 +252,21 @@ export default function Page({ params }) {
                 slidesPerView: "3",
               },
             }}
+            autoplay={{delay:5000,
+              disableOnInteraction: false}}
+            loop={true}
             slidesPerView={3}
             spaceBetween={20}
             freeMode={true}
             pagination={{
               clickable: true,
             }}
-            modules={[FreeMode, Pagination]}
+            modules={[FreeMode, Pagination,Autoplay]}
             className="mySwiper"
           >
             {trekkingData?.allTrekking?.map((data) => {
               return (
-                <SwiperSlide key={data._id}>
+                <SwiperSlide key={data._id} >
                   <Link href={`/trekking/${data._id}`}>
                     <Card style={{ width: "18rem" }} className={styles.card}>
                       <Card.Img

@@ -1,19 +1,18 @@
 "use client";
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import { FreeMode, Pagination } from "swiper";
 import { Container, Card, Button } from "react-bootstrap";
-import { useGetOurServicesDataQuery } from "../../services/adminInteraction";
 
-const OurServices = () => {
-  const { data } = useGetOurServicesDataQuery();
+
+const OurServices = ({data}) => {
+  
 
   return (
     <Container style={{ marginTop: "3rem" }}>
-      <h1 style={{ textAlign: "center" }}>Our Services</h1>
+      <h1 style={{ textAlign: "center",color:"gray" }}>Our Services</h1>
       <Swiper
         breakpoints={{
           0: {
@@ -39,7 +38,7 @@ const OurServices = () => {
           return (
             <SwiperSlide key={data._id}>
               <Card style={{ width: "auto" }}>
-                <Card.Img variant="top" src={data.image} />
+                <Card.Img variant="top" src={data.image} style={{maxHeight:"10rem"}} />
                 <Card.Body>
                   <Card.Title>{data.title}</Card.Title>
                   <Card.Text>{`${data.description}`.slice(0, 5)}</Card.Text>

@@ -4,7 +4,8 @@ import Form from "react-bootstrap/Form";
 import React, { useEffect, useState } from "react";
 import FileBase from "react-file-base64";
 import { useCreateTestimonialDataMutation } from "../../../../../services/adminInteraction";
-
+import { uploadImage } from "../../../../../services/upload";
+import { formDataFactory } from "../../../../../helpers/factories";
 import { useRouter } from "next/navigation";
 import { Col, Row } from "react-bootstrap";
 
@@ -19,7 +20,20 @@ const Testimonial = () => {
     useCreateTestimonialDataMutation();
   const router = useRouter();
   const { name, image, comment } = testimonialData;
-
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setTestimonialData({
+      ...testimonialData,
+      image: response.data.data.secure_url,
+    });
+    alert("success");
+    return;
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     createTestimonialData(testimonialData);
@@ -60,14 +74,10 @@ const Testimonial = () => {
               onChange={onInputChange}
             />
           </Form.Group>
-          <FileBase
-            type="file"
-            name="image"
-            multiple={false}
-            onDone={({ base64 }) =>
-              setTestimonialData({ ...testimonialData, image: base64 })
-            }
-          />
+          <input type="file" onChange={handleOnChange} />
+          <Button variant="primary" onClick={handleImageAdd}>
+            Add
+          </Button>
 
           <Button variant="primary" type="submit" onClick={handleSubmit}>
             Submit

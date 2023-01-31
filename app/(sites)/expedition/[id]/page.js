@@ -12,17 +12,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-import { FreeMode, Pagination } from "swiper";
+import { FreeMode, Pagination,Autoplay } from "swiper";
 import Link from "next/link";
 import { Card } from "react-bootstrap";
-import Spinner from "react-bootstrap";
+
 export default function Page({ params }) {
   const { id } = params;
-  const { data ,isFetching} = useGetExpeditionDataByIdQuery(id);
+  const { data, isFetching } = useGetExpeditionDataByIdQuery(id);
   const { data: expedition } = useGetExpeditionDataQuery();
-  if (isFetching) {
-    return <Spinner animation="border" variant="danger" />;
-  }
+
   return (
     <div className={styles.mainDiv}>
       <div className={styles.left}>
@@ -252,13 +250,16 @@ export default function Page({ params }) {
                 slidesPerView: "3",
               },
             }}
+            autoplay={{delay:5000,
+              disableOnInteraction: false}}
+            loop={true}
             slidesPerView={3}
             spaceBetween={20}
             freeMode={true}
             pagination={{
               clickable: true,
             }}
-            modules={[FreeMode, Pagination]}
+            modules={[FreeMode, Pagination,Autoplay]}
             className="mySwiper"
           >
             {expedition?.allExpedition?.map((data) => {
@@ -283,7 +284,10 @@ export default function Page({ params }) {
         </div>
       </div>
       <div>
-        <TripBookForm />
+      <TripBookForm
+          price={data?.expedition?.price}
+          discount={data?.expedition?.discount}
+        />
       </div>
     </div>
   );

@@ -23,8 +23,7 @@ const Nepal = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             Trekking In Nepal
@@ -55,8 +54,7 @@ const Nepal = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             DayExcursion In Nepal
@@ -87,8 +85,7 @@ const Nepal = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             Expedition In Nepal
@@ -119,8 +116,7 @@ const Nepal = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             Hiking In Nepal
@@ -151,8 +147,7 @@ const Nepal = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             PeakClimbing In Nepal
@@ -182,8 +177,7 @@ const Nepal = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+            color:"gray"
             }}
           >
             VehicleTour In Nepal

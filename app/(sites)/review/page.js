@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { useCreateTestimonialDataMutation } from "../../../services/adminInteraction";
-import FileBase from "react-file-base64";
+import { uploadImage } from "../../../services/upload";
+import { formDataFactory } from "../../../helpers/factories";
 import { useRouter } from "next/navigation";
 const initialState = {
   name: "",
@@ -13,28 +14,40 @@ const Review = () => {
   const [testimonialData, setTestimonialData] = useState(initialState);
   const router = useRouter();
   const { image, name, comment } = testimonialData;
+
   const [createTestimonialData, { isSuccess }] =
     useCreateTestimonialDataMutation();
   const onInputChange = (e) => {
     const { name, value } = e.target;
     setTestimonialData({ ...testimonialData, [name]: value });
   };
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setTestimonialData({
+      ...testimonialData,
+      image: response.data.data.secure_url,
+    });
+    alert("success");
+    return;
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     createTestimonialData(testimonialData);
-    router.push("/")
+    router.push("/");
   };
-  useEffect(()=>{
-    if(isSuccess){
-      return(
-        alert("Review Sent Successfully ...!!!!!")
-      )
+  useEffect(() => {
+    if (isSuccess) {
+      return alert("Review Sent Successfully ...!!!!!");
     }
-
-  },[isSuccess])
+  }, [isSuccess]);
   return (
     <>
-      <Container style={{marginTop:"5rem", marginBottom:"5rem"}}>
+      <Container style={{ marginTop: "5rem", marginBottom: "5rem" }}>
         <h4>Hey There 👋</h4>
         <h6>Share your tour Experience</h6>
         <div>
@@ -60,13 +73,10 @@ const Review = () => {
               />
             </Form.Group>
             <div style={{ width: "100%", overflow: "hidden" }}>
-              <FileBase
-                type="file"
-                multiple={false}
-                onDone={({ base64 }) =>
-                  setTestimonialData({ ...testimonialData, image: base64 })
-                }
-              />
+              <input type="file" onChange={handleOnChange} />
+              <Button variant="primary" onClick={handleImageAdd}>
+                Add
+              </Button>
             </div>
 
             <Button

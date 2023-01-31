@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
 body{
     /* font-family: 'Open Sans', sans-serif; */
-    font-family: 'Playfair Display', serif;
+    font-family: 'Raleway', sans-serif;
     /* overflow: hidden; */
 }
 *{

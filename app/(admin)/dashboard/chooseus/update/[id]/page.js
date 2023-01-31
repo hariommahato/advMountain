@@ -4,14 +4,14 @@ import { Router } from "next/router";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import FileBase from "react-file-base64";
+import { uploadImage } from "../../../../../../services/upload";
+import { formDataFactory } from "../../../../../../helpers/factories";
 import {
   useGetChooseUsDataByIdQuery,
   useUpdateChooseUsDataMutation,
 } from "../../../../../../services/adminInteraction";
 const initialState = {
   title: "",
-  description: "",
   image: "",
 };
 export default function ChooseUs({ params }) {
@@ -20,11 +20,18 @@ export default function ChooseUs({ params }) {
   const [updateChooseUsData, { isSuccess }] = useUpdateChooseUsDataMutation();
   const [chooseUsData, setChooseUsData] = useState(initialState);
   const router = useRouter();
-  const { title, description, image } = chooseUsData;
-  {
-    console.log(data);
+  const { title, image } = chooseUsData;
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
   }
-
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setChooseUsData({ ...chooseUsData, image: response.data.data.secure_url });
+    alert("success");
+    return;
+  }
   useEffect(() => {
     setChooseUsData({
       title: data?.chooseUs.title,
@@ -33,9 +40,8 @@ export default function ChooseUs({ params }) {
     });
   }, [data]);
 
-  if(isSuccess){
-    router.push('/dashboard/chooseus')
-    console.log("success")
+  if (isSuccess) {
+    router.push("/dashboard/chooseus");
   }
 
   const handleSubmit = (e) => {
@@ -62,24 +68,11 @@ export default function ChooseUs({ params }) {
             onChange={onInputChange}
           />
         </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            type="text"
-            name="description"
-            placeholder="description"
-            value={description}
-            onChange={onInputChange}
-          />
-        </Form.Group>
-        <FileBase
-          type="file"
-          name="image"
-          multiple={false}
-          onDone={({ base64 }) =>
-            setChooseUsData({ ...chooseUsData, image: base64 })
-          }
-        />
+
+        <input type="file" onChange={handleOnChange} />
+        <Button variant="primary" onClick={handleImageAdd}>
+          Add
+        </Button>
 
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit

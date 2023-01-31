@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import Button from "react-bootstrap/Button";
+
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
+
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import styles from "../../Styles/TopNavbar.module.scss";
@@ -10,7 +10,7 @@ import countryData from "../../FakeData/Country.json";
 function TopHeader() {
   return (
     
-    <Navbar expand="lg" className={styles.topNavBar}>
+    <Navbar expand="lg" className={styles.topNavBar} fixed="top">
       <Container fluid className="m-auto">
         <Navbar.Brand className={styles.links} as={Link} href="/">
           Adventure Mountain

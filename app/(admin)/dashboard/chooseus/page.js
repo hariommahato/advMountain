@@ -18,9 +18,7 @@ const ChooseUs = () => {
   const handleDeleteClick = async (id) => {
     await deleteChooseUsData(id);
   };
-  useEffect(() => {
-    return alert("Deleted Successfully ..!!!!");
-  });
+ 
 
   return (
     <>

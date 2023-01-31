@@ -1,15 +1,15 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import { useGetChooseUsDataQuery } from "../../services/adminInteraction";
+
 import styles from "../../Styles/WhyChooseUs.module.scss";
 
-const WhyUs = () => {
-  const {data}=useGetChooseUsDataQuery()
+const WhyUs = ({ data }) => {
   return (
     <div style={{ marginTop: "2rem" }}>
-      <h1 style={{ textAlign: "center" }}>why we are different from other?</h1>
-
+      <h1 style={{ textAlign: "center", color: "gray" }}>
+        why we are different from other?
+      </h1>
       <div className={styles.whychooseusMain}>
         {data?.allChooseUs?.map((data) => {
           return (

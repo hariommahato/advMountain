@@ -2,9 +2,9 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import React, { useEffect, useState } from "react";
-import FileBase from "react-file-base64";
+import { uploadImage } from "../../../../../services/upload";
+import { formDataFactory } from "../../../../../helpers/factories";
 import { useCreatPopularDestinationDataMutation } from "../../../../../services/adminInteraction";
-
 import { useRouter } from "next/navigation";
 import { Col, Row } from "react-bootstrap";
 
@@ -19,6 +19,18 @@ const PopularDestination = () => {
     useCreatPopularDestinationDataMutation();
   const router = useRouter();
   const { image, name } = popularDestinationData;
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setPopularDestinationData({ ...popularDestinationData, image: response.data.data.secure_url });
+    alert("success");
+    return;
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,17 +64,10 @@ const PopularDestination = () => {
             />
           </Form.Group>
 
-          <FileBase
-            type="file"
-            name="image"
-            multiple={false}
-            onDone={({ base64 }) =>
-              setPopularDestinationData({
-                ...popularDestinationData,
-                image: base64,
-              })
-            }
-          />
+          <input type="file" onChange={handleOnChange} />
+          <Button variant="primary" onClick={handleImageAdd}>
+            Add
+          </Button>
 
           <Button variant="primary" type="submit" onClick={handleSubmit}>
             Submit

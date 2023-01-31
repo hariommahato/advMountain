@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
-
+import { uploadImage } from "../../../../../../services/upload";
+import { formDataFactory } from "../../../../../../helpers/factories";
 import { useEffect, useState } from "react";
 import { Container, Form, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import FileBase from "react-file-base64";
 import {
   useGetDayExcursionDataByIdQuery,
   useUpdateDayExcursionDataMutation,
@@ -48,6 +48,7 @@ export default function DayExcursion({ params }) {
   const [visaAndEntryProcedure, setVisaAndEntryProcedure] = useState("");
   const [guidesTitle, setGuidesTitle] = useState("");
   const [ourGuides, setOurGuides] = useState([]);
+  const [image, setImage] = useState("");
   useEffect(() => {
     setMap(data?.dayexcursion?.map);
     setName(data?.dayexcursion?.name);
@@ -80,6 +81,7 @@ export default function DayExcursion({ params }) {
       console.log("success");
     }
   }, [isSuccess]);
+  
   const handleUpdateData = () => {
     updateDayExcursionData({
       id,
@@ -107,6 +109,33 @@ export default function DayExcursion({ params }) {
     });
     router.push("/dashboard/dayexcursion");
   };
+  function handleOnChange(e) {
+    setImage(e.target.files[0]);
+  }
+  async function handleMapAdd() {
+    const formData = formDataFactory(image, "reactupload");
+    const response = await uploadImage(formData);
+    setMap(response.data.data.url);
+    alert("success");
+    return;
+  }
+  async function handleHomeImageCarousel() {
+    const formData = formDataFactory(image, "reactupload");
+    const response = await uploadImage(formData);
+    setHomeImageCarousel([
+      ...homeImageCarousel,
+      { carouselImage: response.data.data.url },
+    ]);
+    alert("Success");
+    return;
+  }
+  async function handleTourImage() {
+    const formData = formDataFactory(image, "reactupload");
+    const response = await uploadImage(formData);
+    setTourImages([...tourImages, { tourImage: response.data.data.url }]);
+    alert("Success");
+    return;
+  }
   return (
     <>
       <Container>
@@ -240,13 +269,10 @@ export default function DayExcursion({ params }) {
             <img src={map} style={{ height: "100px", width: "100px" }} />
             <h4>
               Change Map
-              <FileBase
-                type="file"
-                name="image"
-                onDone={({ base64 }) => setMap(base64)}
-              />
+              <input type="file" onChange={handleOnChange} />
             </h4>
           </Col>
+          <Button onClick={handleMapAdd}>Add</Button>
         </Row>
         <Row>
           <Col xs={12} sm={12} md={6} lg={6}>
@@ -265,17 +291,9 @@ export default function DayExcursion({ params }) {
             </div>
             <div>
               <h4>Add homeImageCarousel</h4>
-              <FileBase
-                type="file"
-                name="image"
-                onDone={({ base64 }) =>
-                  setHomeImageCarousel([
-                    ...homeImageCarousel,
-                    { carouselImage: base64 },
-                  ])
-                }
-              />
+              <input type="file" onChange={handleOnChange} />
             </div>
+            <Button onClick={handleHomeImageCarousel}>Add</Button>
           </Col>
         </Row>
         <Button
@@ -287,7 +305,37 @@ export default function DayExcursion({ params }) {
         >
           Delete Home Image Carousel
         </Button>
-
+        <Row>
+          <Col xs={12} sm={12} md={6} lg={6}>
+            <h4>Tour Images</h4>
+            <div style={{ display: "flex", gap: "10px" }}>
+              {tourImages?.map((item, index) => {
+                return (
+                  <img
+                    key={index}
+                    src={item.tourImage}
+                    alt="/"
+                    style={{ height: "100px", width: "100px" }}
+                  />
+                );
+              })}
+            </div>
+            <div>
+              <h4>Add TourImage</h4>
+              <input type="file" onChange={handleOnChange} />
+            </div>
+            <Button onClick={handleTourImage}>Add</Button>
+            <Button
+              style={{ marginTop: "1rem" }}
+              variant="danger"
+              onClick={() => {
+                setTourImages([]);
+              }}
+            >
+              Delete TourImages
+            </Button>
+          </Col>
+        </Row>
         <Row>
           <h4>Highlight</h4>
           <Col>
@@ -336,42 +384,7 @@ export default function DayExcursion({ params }) {
           </Col>
         </Row>
 
-        <Row>
-          <Col xs={12} sm={12} md={6} lg={6}>
-            <h4>Tour Images</h4>
-            <div style={{ display: "flex", gap: "10px" }}>
-              {tourImages?.map((item, index) => {
-                return (
-                  <img
-                    key={index}
-                    src={item.tourImage}
-                    alt="/"
-                    style={{ height: "100px", width: "100px" }}
-                  />
-                );
-              })}
-            </div>
-            <div>
-              <h4>Add TourImage</h4>
-              <FileBase
-                type="file"
-                name="image"
-                onDone={({ base64 }) =>
-                  setTourImages([...tourImages, { tourImage: base64 }])
-                }
-              />
-            </div>
-            <Button
-              style={{ marginTop: "1rem" }}
-              variant="danger"
-              onClick={() => {
-                setTourImages([]);
-              }}
-            >
-              Delete TourImages
-            </Button>
-          </Col>
-        </Row>
+       
 
         <Row>
           <h4>Itinerary</h4>

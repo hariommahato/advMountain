@@ -2,7 +2,10 @@
 import Carousel from "react-bootstrap/Carousel";
 import { Table } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
-import { useGetDayExcursionDataByIdQuery, useGetDayExcursionDataQuery } from "../../../../services/adminInteraction";
+import {
+  useGetDayExcursionDataByIdQuery,
+  useGetDayExcursionDataQuery,
+} from "../../../../services/adminInteraction";
 import TripBookForm from "../../../../components/TripBookForm/page";
 import styles from "../../../../Styles/Expedition.module.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,16 +13,13 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import Link from "next/link";
-import { FreeMode, Pagination } from "swiper";
+import { FreeMode, Pagination, Autoplay } from "swiper";
 import { Card } from "react-bootstrap";
-import Spinner from "react-bootstrap";
 export default function Page({ params }) {
   const { id } = params;
-  const { data ,isFetching} = useGetDayExcursionDataByIdQuery(id);
-  const {data:dayExcursion}=useGetDayExcursionDataQuery()
-  if (isFetching) {
-    return <Spinner animation="border" variant="danger" />;
-  }
+  const { data, isFetching } = useGetDayExcursionDataByIdQuery(id);
+  const { data: dayExcursion } = useGetDayExcursionDataQuery();
+
   return (
     <div className={styles.mainDiv}>
       <div className={styles.left}>
@@ -221,7 +221,7 @@ export default function Page({ params }) {
           <p>{data?.dayexcursion?.visaAndEntryProcedure}</p>
         </div>
         <div>
-          <h5>Our  Guides/Leaders </h5>
+          <h5>Our Guides/Leaders </h5>
 
           <Table striped bordered hover>
             <tbody>
@@ -249,13 +249,15 @@ export default function Page({ params }) {
                 slidesPerView: "3",
               },
             }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            loop={true}
             slidesPerView={3}
             spaceBetween={20}
             freeMode={true}
             pagination={{
               clickable: true,
             }}
-            modules={[FreeMode, Pagination]}
+            modules={[FreeMode, Pagination, Autoplay]}
             className="mySwiper"
           >
             {dayExcursion?.allDayExcursion?.map((data) => {
@@ -276,11 +278,13 @@ export default function Page({ params }) {
               );
             })}
           </Swiper>
-         
         </div>
       </div>
       <div>
-        <TripBookForm />
+        <TripBookForm
+          price={data?.dayexcursion?.price}
+          discount={data?.dayexcursion?.discount}
+        />
       </div>
     </div>
   );

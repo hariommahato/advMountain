@@ -1,9 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import FileBase from "react-file-base64";
-import { useGetAboutUsDataByIdQuery ,useUpdateAboutDataMutation} from "../../../../../../services/adminInteraction";
+import { uploadImage } from "../../../../../../services/upload";
+import { formDataFactory } from "../../../../../../helpers/factories";
+import {
+  useGetAboutUsDataByIdQuery,
+  useUpdateAboutDataMutation,
+} from "../../../../../../services/adminInteraction";
+import { useRouter } from "next/navigation";
 const initialState = {
   title: "",
   description: "",
@@ -12,13 +17,11 @@ const initialState = {
 export default function About({ params }) {
   const { id } = params;
   const { data } = useGetAboutUsDataByIdQuery(id);
-  const [updateAboutData]=useUpdateAboutDataMutation();
+  const [updateAboutData, { isSuccess }] = useUpdateAboutDataMutation();
   const [aboutData, setAboutData] = useState(initialState);
+  const [selectedImage, setSelectedImage] = useState("");
   const { title, description, image } = aboutData;
-  {
-    console.log(data?.aboutUs.title);
-  }
-
+  const router = useRouter();
   useEffect(() => {
     setAboutData({
       title: data?.aboutUs.title,
@@ -26,18 +29,32 @@ export default function About({ params }) {
       image: data?.aboutUs.image,
     });
   }, [data]);
- 
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/dashboard/about");
+    }
+  }, [isSuccess]);
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setAboutData({ ...aboutData, image: response.data.data.secure_url });
+    alert("success");
+    return;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateAboutData({id,aboutData})
+    updateAboutData({ id, aboutData });
   };
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
     setAboutData({ ...aboutData, [name]: value });
   };
-  console.log(aboutData)
+  console.log(aboutData);
   return (
     <>
       <Form>
@@ -62,12 +79,10 @@ export default function About({ params }) {
             onChange={onInputChange}
           />
         </Form.Group>
-        <FileBase
-          type="file"
-          name="image"
-          multiple={false}
-          onDone={({ base64 }) => setAboutData({ ...aboutData, image: base64 })}
-        />
+        <input type="file" onChange={handleOnChange} />
+        <Button variant="primary" onClick={handleImageAdd}>
+          Add
+        </Button>
 
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit

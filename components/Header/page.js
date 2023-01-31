@@ -2,35 +2,22 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-
 import NavDropdown from "react-bootstrap/NavDropdown";
-import {
-  useGetEverestTrekDataQuery,
-  useGetManasluTrekDataQuery,
-  useGetOffBeatenTrekDataQuery,
-  useGetAnnapurnTrekDataQuery,
-  useGetLangtangTrekDataQuery,
-  useGetPeakClimbingDataQuery,
-  useGetExpeditionDataQuery,
-  useGetDayExcursionDataQuery,
-  useGetVehicleTourDataQuery,
-  useGetHikingDataQuery,
-} from "../../services/adminInteraction";
 import Link from "next/link";
-function Header() {
-  const annapurnaTrekData = useGetAnnapurnTrekDataQuery();
-  const everestTreKData = useGetEverestTrekDataQuery();
-  const manasluTrekData = useGetManasluTrekDataQuery();
-  const langtangTrekData = useGetLangtangTrekDataQuery();
-  const offBeatenTrekData = useGetOffBeatenTrekDataQuery();
-  const peakClimbingData = useGetPeakClimbingDataQuery();
-  const expeditionData = useGetExpeditionDataQuery();
-  const dayexcursionData = useGetDayExcursionDataQuery();
-  const vehicleTour = useGetVehicleTourDataQuery();
-  const hikingData = useGetHikingDataQuery();
-
+function Header({
+  everestTrek,
+  annapurnaTrek,
+  manasluTrek,
+  langtangTrek,
+  offbeatenTrek,
+  peakClimbing,
+  expedition,
+  dayexcursion,
+  vehicletour,
+  hiking,
+}) {
   return (
-    <Navbar bg="light" expand="lg" style={{ height: "6rem" }} variant="sticky">
+    <Navbar bg="light" expand="lg" style={{ height: "6rem",marginTop:"3rem" }} fixed="top">
       <Container fluid>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -47,14 +34,11 @@ function Header() {
             </Nav.Link>
             <NavDropdown title="Trekking" id="navbarScrollingDropdown">
               <NavDropdown title="Everest " id="navbarScrollingDropdown">
-                {everestTreKData?.data?.everestTrek?.map((data) => {
+                {everestTrek?.everestTrek?.map((data) => {
                   return (
                     <NavDropdown.Item
                       as={Link}
-                      href={{
-                        pathname:"/trekking",
-                        query:data,
-                      }}
+                      href={`/trekking/${data._id}`}
                       style={{ width: "100%" }}
                       key={data._id}
                     >
@@ -64,7 +48,7 @@ function Header() {
                 })}
               </NavDropdown>
               <NavDropdown title="Annapurna " id="navbarScrollingDropdown">
-                {annapurnaTrekData?.data?.annapurnaTrek?.map((data) => {
+                {annapurnaTrek?.annapurnaTrek?.map((data) => {
                   return (
                     <NavDropdown.Item
                       as={Link}
@@ -78,11 +62,11 @@ function Header() {
                 })}
               </NavDropdown>
               <NavDropdown title="Manaslu " id="navbarScrollingDropdown">
-                {manasluTrekData?.data?.manasluTrek?.map((data) => {
+                {manasluTrek?.manasluTrek?.map((data) => {
                   return (
                     <NavDropdown.Item
                       as={Link}
-                      href={`/trekking/${data.id}`}
+                      href={`/trekking/${data._id}`}
                       style={{ width: "100%" }}
                       key={data._id}
                     >
@@ -92,7 +76,7 @@ function Header() {
                 })}
               </NavDropdown>
               <NavDropdown title="Langtang " id="navbarScrollingDropdown">
-                {langtangTrekData?.data?.langtangTrek?.map((data) => {
+                {langtangTrek?.langtangTrek?.map((data) => {
                   return (
                     <NavDropdown.Item
                       as={Link}
@@ -109,7 +93,7 @@ function Header() {
                 title="Off Beaten Trek "
                 id="navbarScrollingDropdown"
               >
-                {offBeatenTrekData?.data?.offbeatenTrek?.map((data) => {
+                {offbeatenTrek?.offbeatenTrek?.map((data) => {
                   return (
                     <NavDropdown.Item
                       as={Link}
@@ -124,7 +108,7 @@ function Header() {
               </NavDropdown>
             </NavDropdown>
             <NavDropdown title="Peak Climbing " id="navbarScrollingDropdown">
-              {peakClimbingData?.data?.allPeakClimbing?.map((data) => {
+              {peakClimbing?.allPeakClimbing?.map((data) => {
                 return (
                   <NavDropdown.Item
                     as={Link}
@@ -138,7 +122,7 @@ function Header() {
               })}
             </NavDropdown>
             <NavDropdown title="Expedition " id="navbarScrollingDropdown">
-              {expeditionData?.data?.allExpedition?.map((data) => {
+              {expedition?.allExpedition?.map((data) => {
                 return (
                   <NavDropdown.Item
                     as={Link}
@@ -152,7 +136,7 @@ function Header() {
               })}
             </NavDropdown>
             <NavDropdown title="Day Excursion " id="navbarScrollingDropdown">
-              {dayexcursionData?.data?.allDayExcursion?.map((data) => {
+              {dayexcursion?.allDayExcursion?.map((data) => {
                 return (
                   <NavDropdown.Item
                     as={Link}
@@ -166,7 +150,7 @@ function Header() {
               })}
             </NavDropdown>
             <NavDropdown title="Vehicle Tour" id="navbarScrollingDropdown">
-              {vehicleTour?.data?.allVehicleTour?.map((data) => {
+              {vehicletour?.allVehicleTour?.map((data) => {
                 return (
                   <NavDropdown.Item
                     as={Link}
@@ -180,7 +164,7 @@ function Header() {
               })}
             </NavDropdown>
             <NavDropdown title="Hiking " id="navbarScrollingDropdown">
-              {hikingData?.data?.hiking?.map((data) => {
+              {hiking?.hiking?.map((data) => {
                 return (
                   <NavDropdown.Item
                     as={Link}
@@ -198,14 +182,14 @@ function Header() {
           <Nav.Link
             as={Link}
             href="/faq"
-            style={{ paddingRight: "30px", color: "blue", cursor: "pointer" }}
+            style={{ paddingRight: "30px", color: "#D32626", cursor: "pointer" }}
           >
             FAQ
           </Nav.Link>
           <Nav.Link
             as={Link}
             href="/review"
-            style={{ color: "blue", cursor: "pointer" }}
+            style={{ color: "#D32626", cursor: "pointer" }}
           >
             POST A REVIEW
           </Nav.Link>
@@ -214,6 +198,4 @@ function Header() {
     </Navbar>
   );
 }
-
-// {console.log(hikingData)}
 export default Header;

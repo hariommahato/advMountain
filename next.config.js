@@ -4,10 +4,18 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-  env:{
-    NEXTAUTH_SECRET:"adventuremountainmountainhariomadventurehariommahatomahatoadventure"
-  }
-  
+  env: {
+    NEXTAUTH_SECRET:
+      "adventuremountainmountainhariomadventurehariommahatomahatoadventure",
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

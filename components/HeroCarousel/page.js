@@ -1,10 +1,6 @@
 "use client";
-import Image from "next/image";
 import Carousel from "react-bootstrap/Carousel";
-import { useGetHeroCarouselDataQuery } from "../../services/adminInteraction";
-function HeroCarousel() {
-  const { data } = useGetHeroCarouselDataQuery();
-
+function HeroCarousel({data}) {
   return (
     <>
       <Carousel variant="dark">

@@ -9,6 +9,8 @@ import {
   useGetTestimonialDataByIdQuery,
   useUpdateTestimonialDataMutation,
 } from "../../../../../../services/adminInteraction";
+import { uploadImage } from "../../../../../../services/upload";
+import { formDataFactory } from "../../../../../../helpers/factories";
 const initialState = {
   name: "",
   comment: "",
@@ -22,8 +24,16 @@ export default function Testimonial({ params }) {
   const [testimonialData, setTestimonialData] = useState(initialState);
   const router = useRouter();
   const { name, comment, image } = testimonialData;
-  {
-    console.log(data);
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setTestimonialData({ ...testimonialData, image: response.data.data.secure_url });
+    alert("success");
+    return;
   }
 
   useEffect(() => {
@@ -71,14 +81,10 @@ export default function Testimonial({ params }) {
             onChange={onInputChange}
           />
         </Form.Group>
-        <FileBase
-          type="file"
-          name="image"
-          multiple={false}
-          onDone={({ base64 }) =>
-            setTestimonialData({ ...testimonialData, image: base64 })
-          }
-        />
+        <input type="file" onChange={handleOnChange} />
+        <Button variant="primary" onClick={handleImageAdd}>
+          Add
+        </Button>
 
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit

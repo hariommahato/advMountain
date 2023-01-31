@@ -4,7 +4,8 @@ import { Router } from "next/router";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import FileBase from "react-file-base64";
+import { uploadImage } from "../../../../../../services/upload";
+import { formDataFactory } from "../../../../../../helpers/factories";
 import {
   useGetOurServicesDataByIdQuery,
   useUpdateOurServicesDataMutation,
@@ -22,7 +23,17 @@ export default function OurServices({ params }) {
   const [ourServicesData, setOurServicesData] = useState(initialState);
   const router = useRouter();
   const { title, description, image } = ourServicesData;
-
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setOurServicesData({ ...ourServicesData, image: response.data.data.secure_url });
+    alert("success");
+    return;
+  }
   useEffect(() => {
     setOurServicesData({
       title: data?.ourServices.title,
@@ -68,14 +79,10 @@ export default function OurServices({ params }) {
             onChange={onInputChange}
           />
         </Form.Group>
-        <FileBase
-          type="file"
-          name="image"
-          multiple={false}
-          onDone={({ base64 }) =>
-            setOurServicesData({ ...ourServicesData, image: base64 })
-          }
-        />
+        <input type="file" onChange={handleOnChange} />
+        <Button variant="primary" onClick={handleImageAdd}>
+          Add
+        </Button>
 
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit

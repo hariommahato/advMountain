@@ -12,11 +12,7 @@ dbConnect();
 handler.get(getTrek).put(updateTrek).delete(deleteTrek);
 export const config = {
   api: {
-    responseLimit: false,
-    bodyParser: {
-      sizeLimit: "800mb",
-    },
+    responseLimit: "800mb",
   },
-
 };
 export default handler;

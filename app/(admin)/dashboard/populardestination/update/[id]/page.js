@@ -4,36 +4,50 @@ import { Router } from "next/router";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import FileBase from "react-file-base64";
+import { uploadImage } from "../../../../../../services/upload";
+import { formDataFactory } from "../../../../../../helpers/factories";
 import {
   useGetPopularDestinationDataByIdQuery,
   useUpdatePopularDestinationDataMutation,
 } from "../../../../../../services/adminInteraction";
 const initialState = {
-  
   image: "",
-  name:""
+  name: "",
 };
 export default function ChooseUs({ params }) {
   const { id } = params;
   const { data } = useGetPopularDestinationDataByIdQuery(id);
-  const [updatePopularDestinationData, { isSuccess }] = useUpdatePopularDestinationDataMutation();
-  const [popularDestinationData, setPopularDestinationData] = useState(initialState);
+  const [updatePopularDestinationData, { isSuccess }] =
+    useUpdatePopularDestinationDataMutation();
+  const [popularDestinationData, setPopularDestinationData] =
+    useState(initialState);
   const router = useRouter();
-  const { image ,name} = popularDestinationData;
-
+  const { image, name } = popularDestinationData;
+  const [selectedImage, setSelectedImage] = useState("");
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    setPopularDestinationData({
+      ...popularDestinationData,
+      image: response.data.data.secure_url,
+    });
+    alert("success");
+    return;
+  }
 
   useEffect(() => {
     setPopularDestinationData({
       name: data?.popularDestination.name,
       image: data?.popularDestination.image,
-      
     });
   }, [data]);
 
-  if(isSuccess){
-    router.push('/dashboard/populardestination')
-    console.log("success")
+  if (isSuccess) {
+    router.push("/dashboard/populardestination");
+    console.log("success");
   }
 
   const handleSubmit = (e) => {
@@ -60,15 +74,11 @@ export default function ChooseUs({ params }) {
             onChange={onInputChange}
           />
         </Form.Group>
-       
-        <FileBase
-          type="file"
-          name="image"
-          multiple={false}
-          onDone={({ base64 }) =>
-            setPopularDestinationData({ ...popularDestinationData, image: base64 })
-          }
-        />
+
+        <input type="file" onChange={handleOnChange} />
+        <Button variant="primary" onClick={handleImageAdd}>
+          Add
+        </Button>
 
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit

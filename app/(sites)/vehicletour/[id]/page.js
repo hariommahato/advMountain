@@ -12,21 +12,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-import { FreeMode, Pagination } from "swiper";
+import { FreeMode, Autoplay,Pagination } from "swiper";
 import { Card } from "react-bootstrap";
 import Link from "next/link";
-import Spinner from "react-bootstrap";
 export default function Page({ params }) {
   const { id } = params;
   const { data ,isFetching} = useGetVehicleTourByIdQuery(id);
   const { data: vehicleTour } = useGetVehicleTourDataQuery();
-  if (isFetching) {
-    return <Spinner animation="border" variant="danger" />;
-  }
+  
   return (
     <div className={styles.mainDiv}>
       <div className={styles.left}>
-        <h1>{data?.trek?.name}</h1>
+        <h1>{data?.vehicleTour?.name}</h1>
 
         <Carousel variant="dark">
           {data?.vehicleTour?.homeImageCarousel?.map((data) => {
@@ -252,13 +249,16 @@ export default function Page({ params }) {
                 slidesPerView: "3",
               },
             }}
+            autoplay={{delay:5000,
+              disableOnInteraction: false}}
+            loop={true}
             slidesPerView={3}
             spaceBetween={20}
             freeMode={true}
             pagination={{
               clickable: true,
             }}
-            modules={[FreeMode, Pagination]}
+            modules={[FreeMode, Pagination,Autoplay]}
             className="mySwiper"
           >
             {vehicleTour?.allVehicleTour?.map((data) => {
@@ -284,7 +284,10 @@ export default function Page({ params }) {
         </div>
       </div>
       <div>
-        <TripBookForm />
+      <TripBookForm
+          price={data?.vehicleTour?.price}
+          discount={data?.vehicleTour?.discount}
+        />
       </div>
     </div>
   );

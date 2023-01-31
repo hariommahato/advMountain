@@ -2,7 +2,8 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import React, { useEffect, useState } from "react";
-import FileBase from "react-file-base64";
+import { uploadImage } from "../../../../../services/upload";
+import { formDataFactory } from "../../../../../helpers/factories";
 import { useCreateAboutDataMutation } from "../../../../../services/adminInteraction";
 import { useRouter } from "next/navigation";
 import { Row, Col } from "react-bootstrap";
@@ -13,6 +14,7 @@ const initialState = {
 };
 const About = () => {
   const [aboutData, SetAboutData] = useState(initialState);
+  const [selectedImage, setSelectedImage] = useState("");
   const [createAboutData, { isSuccess }] = useCreateAboutDataMutation();
   const router = useRouter();
   const { title, image, description } = aboutData;
@@ -24,11 +26,16 @@ const About = () => {
     SetAboutData("");
   };
 
-  useEffect(() => {
-    if (isSuccess) {
-      return alert("Added Successfully");
-    }
-  }, [isSuccess]);
+  function handleOnChange(e) {
+    setSelectedImage(e.target.files[0]);
+  }
+  async function handleImageAdd() {
+    const formData = formDataFactory(selectedImage, "reactupload");
+    const response = await uploadImage(formData);
+    SetAboutData({ ...aboutData, image: response.data.data.secure_url });
+    alert("success");
+    return;
+  }
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,14 +66,10 @@ const About = () => {
               onChange={onInputChange}
             />
           </Form.Group>
-          <FileBase
-            type="file"
-            name="image"
-            multiple={false}
-            onDone={({ base64 }) =>
-              SetAboutData({ ...aboutData, image: base64 })
-            }
-          />
+          <input type="file" onChange={handleOnChange} />
+          <Button variant="primary" onClick={handleImageAdd}>
+            Add
+          </Button>
           <div style={{ marginTop: "1rem" }}>
             <Button variant="primary" type="submit" onClick={handleSubmit}>
               Submit

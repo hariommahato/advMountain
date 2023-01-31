@@ -23,8 +23,7 @@ const Pakistan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+              color:"gray"
             }}
           >
             Trekking In Pakistan
@@ -55,8 +54,7 @@ const Pakistan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+            color:"gray"
             }}
           >
             DayExcursion In Pakistan
@@ -87,8 +85,7 @@ const Pakistan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+           color:"gray"
             }}
           >
             Expedition In Pakistan
@@ -119,8 +116,7 @@ const Pakistan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+             color:"gray"
             }}
           >
             Hiking In Pakistan
@@ -151,8 +147,7 @@ const Pakistan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+            color:"gray"
             }}
           >
             PeakClimbing In Pakistan
@@ -182,8 +177,7 @@ const Pakistan = () => {
         <Row>
           <h5
             style={{
-              textDecoration: "underline",
-              color: "#E14D2A",
+              color:"gray"
             }}
           >
             VehicleTour In Pakistan

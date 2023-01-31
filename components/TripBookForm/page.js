@@ -1,25 +1,38 @@
 "use client";
-import React, { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Table from "react-bootstrap/Table";
+import { toast } from "react-toastify";
 const TripBookForm = ({ price, discount }) => {
   const [totalPrice, setTotalPrice] = useState(price);
-  const [noofPeople, setNoofPeople] = useState(0);
-  const discountPercent=discount;
-  const discountAmount=((price/100)*discountPercent)
-  console.log(discountAmount)
-  console.log(discountPercent)
-  const handleIncrease=()=>{
-    setNoofPeople(noofPeople+1)
-    setTotalPrice((totalPrice+totalPrice)-discountAmount)
-  }
-  const handleDecrease=()=>{
-    setNoofPeople(noofPeople-1)
-    setTotalPrice((totalPrice)-(discountAmount+price))
+  const [noofPeople, setNoofPeople] = useState(1);
+  const [oldPrice, setOldPrice] = useState(price);
+  const discountAmount = oldPrice * (discount / 100);
 
+  useEffect(() => {
+    if (price) {
+      setTotalPrice(price);
+      setOldPrice(price);
+    }
+  }, [price]);
+  const handlePeopleChange = (event) => {
+    setNoofPeople(event.target.value);
+  };
+  {
+    console.log(oldPrice);
   }
+  {
+    console.log(noofPeople);
+  }
+
+  const calculatePrice = () => {
+    if (noofPeople == 1) {
+      setTotalPrice(noofPeople * oldPrice);
+    } else {
+      setTotalPrice(noofPeople * oldPrice - discountAmount);
+    }
+  };
+
   return (
     <div
       style={{
@@ -31,42 +44,11 @@ const TripBookForm = ({ price, discount }) => {
     >
       <h5>All Inclusive Price</h5>
       <h6>Rs {totalPrice}</h6>
-      <DropdownButton id="dropdown-basic-button" title="Show Group Price">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>No of People</th>
-              <th>Price Per/Person</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Rs 1400</td>
-            </tr>
-            <tr>
-              <td>2-4</td>
-              <td>Rs 1300</td>
-            </tr>
-            <tr>
-              <td>5-8</td>
-              <td colSpan={2}>Rs 1100</td>
-            </tr>
-          </tbody>
-        </Table>
-      </DropdownButton>
+
       <div>
+        <label>No of Person</label>
         <input
-          type="date"
-          placeholder="Pick Your Date"
-          style={{
-            padding: "1rem",
-            backgroundColor: "white",
-            width: "100%",
-            marginTop: "3px",
-          }}
-        />
-        <input
+          value={noofPeople}
           type="number"
           placeholder="No of Person"
           style={{
@@ -75,27 +57,38 @@ const TripBookForm = ({ price, discount }) => {
             width: "100%",
             marginTop: "3px",
           }}
-          value={noofPeople}
+          onChange={handlePeopleChange}
         />
       </div>
-      <div style={{display:"flex",gap:"10px",alignItems:"center"}}>
-        <Button variant="danger" onClick={handleDecrease}>
-          -
-        </Button>
-        <Button variant="success" onClick={handleIncrease}>
-          +
-        </Button>
+      <Button onClick={calculatePrice} variant="danger" style={{marginTop:"3px"}}>
+        Calculate Price
+      </Button>
+
+      <div>
+        <Link href={"/booktrip"}>
+          <Button
+            variant="primary"
+            style={{
+              width: "100%",
+              marginTop: "3px",
+            }}
+          >
+            Book My Trip
+          </Button>
+        </Link>
       </div>
       <div>
-        <Button
-          style={{
-            width: "100%",
-            marginTop: "3px",
-            backgroundColor: "#89CFFD",
-          }}
-        >
-          Book My Trip
-        </Button>
+        <Link href={"/customizetrip"}>
+          <Button
+            variant="success"
+            style={{
+              width: "100%",
+              marginTop: "3px",
+            }}
+          >
+            customizetrip
+          </Button>
+        </Link>
       </div>
     </div>
   );
